@@ -63,9 +63,13 @@
 
     ===================== */
 
-    L.marker([0, 0]).addTo(map);
-    L.marker([0, 0]).addTo(map);
-    L.marker([0, 0]).addTo(map);
+    var restaurantData = [[39.960297, -75.168742, "Sabrinas"], [39.948433, -75.217884, "Vientienne"], [39.937115, -75.154476, "Royal Tavern"]];
+
+    for (var i = 0; i < restaurantData.length; i++){
+        L.marker(restaurantData[i]).addTo(map).bindPopup(restaurantData[i][2]).openPopup(restaurantData[i][2]);
+        //var popUp = openPopup(restaurantData[i][2]).openOn(map);
+    }
+
 
     /* =====================
 

@@ -29,7 +29,7 @@
       var theArray = ['A short story.', 42, {'place': 'LA'}, 55, ['Another story'], 23, 12, 2, 4, 5, 6, 'bar', 'foo'];
 
       // Here's the variable we need to hold our count in:
-      var exampleSum = 0; // To count of the strings
+    /*  var exampleSum = 0; // To count of the strings
 
       // A loop for summing the contents of theArray
       for (var i = 0; i < theArray.length; i++) {
@@ -42,7 +42,7 @@
           console.log("Not sure how to proceed with value:", arrayValue)
         }
       }
-
+*/
       /* =====================
 
       Start code
@@ -52,15 +52,37 @@
       // Store sum you compute in this variable:
       var yourSum = 0;
 
+      /*var func = function(argument1, argument2){
+        console.log("here's 1:", argument1);
+        console.log("here's 2:", argument2);
+      }
+      func(1, 90)
+*/
+
+      var simpleFunction = function(arrayValue, i){
+        if (typeof arrayValue[i] === 'string') {         // String case
+          yourSum = yourSum + arrayValue[i].length
+        } else if (typeof arrayValue[i] === 'number') {  // Number case
+          yourSum = yourSum + arrayValue[i]
+        } else {                                      // Otherwise
+          console.log("Not sure how to proceed with value:", arrayValue[i])
+        }
+      }
+
+      for (var i = 0; i < theArray.length; i++) {
+        simpleFunction(theArray, i)
+      }
+
+
       // Refactor the work above into a few different functions that are reusable to the extent that you can
-      for (var i = 0; i < theArray.length, i++) { /* Do stuff here */ }
+      //for (var i = 0; i < theArray.length, i++) { /* Do stuff here */ }
 
       /* =====================
 
       End code
 
       ===================== */
-      console.log("Success: ", yourSum === 169)
+      console.log("Success: ", yourSum === 169, "I think the value is:", yourSum);
     </script>
   </body>
 </html>

@@ -51,8 +51,6 @@
 
     ===================== */
 
-    var data = bikeArrayClean;
-
     /* =====================
 
     Start code to filter data
@@ -60,7 +58,36 @@
     ===================== */
 
 
+    var dataFiltered = [];
 
+    for (i = 0; i < bikeArrayClean.length; i++){
+      if (bikeArrayDirty[i].length == 4){
+        dataFiltered.push(bikeArrayDirty[i]);
+      }
+    }
+
+    var swapFloatSplit = function(myArray, indexA, indexB, indexC) {
+      var temp = parseFloat(myArray[indexA]);
+      myArray[indexA] = parseFloat(myArray[indexB]);
+      myArray[indexB] = temp;
+      var temp2 = myArray[indexC].split(" ");
+      myArray.pop();
+      myArray.push(temp2[0]);
+      myArray[3] = parseInt(myArray[3]);
+    }
+
+    for (i = 0; i < dataFiltered.length; i++){
+      swapFloatSplit(dataFiltered[i], 0, 1, 3);
+    }
+
+    for (i = 0; i < dataFiltered.length; i++){
+      if(dataFiltered[i][3] <= 20) {
+        dataFiltered.splice([i], 1);
+        i--;
+      }
+    }
+
+    console.log(dataFiltered);
     /* =====================
 
     End code to filter data
@@ -80,13 +107,19 @@
       ext: 'png'
     }).addTo(map);
 
+  //  for (i = 0; i < dataFiltered.length; i++){
+//        L.marker(dataFiltered[i]).addTo(map).bindPopup(dataFiltered[i][2]).openPopup(dataFiltered[i][2]);
+  //  }
+
     /* =====================
 
     Start code to add markers to map
 
     ===================== */
 
-
+    for (var i = 0; i < dataFiltered.length; i++){
+        L.marker(dataFiltered[i]).addTo(map).bindPopup(dataFiltered[i][2]).openPopup(dataFiltered[i][2]);
+      }
 
     /* =====================
 
