@@ -15,6 +15,20 @@
     <script src="leaflet.js"></script>
     <script src="part4-data-clean.js"></script>
     <script src="part4-data-dirty.js"></script>
+    <script>
+    var map = L.map('map', {
+      center: [39.9522, -75.1639],
+      zoom: 14
+    });
+
+    var Stamen_TonerLite = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.{ext}', {
+      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      subdomains: 'abcd',
+      minZoom: 0,
+      maxZoom: 20,
+      ext: 'png'
+    }).addTo(map);
+    </script>
 
     <script>
 
@@ -57,8 +71,9 @@
 
     ===================== */
 
+//LAB 1, part 4
 
-    var dataFiltered = [];
+/*    var dataFiltered = [];
 
     for (i = 0; i < bikeArrayClean.length; i++){
       if (bikeArrayDirty[i].length == 4){
@@ -87,39 +102,65 @@
       }
     }
 
+    console.log(dataFiltered);*/
+
+    //Lab2
+
+    var dataFiltered = [];
+
+//Function to clean data
+    var newFunc = function(originalArray, myArray, arrayLength, indexA, indexB, indexC){
+      for (i = 0; i < originalArray.length; i++){
+        if (originalArray[i].length == arrayLength){
+          myArray.push(originalArray[i]);
+        }
+      }
+      for (i = 0; i < myArray.length; i++){
+      var temp = parseFloat(myArray[i][indexA]);
+      myArray[i][indexA] = parseFloat(myArray[i][indexB]);
+      myArray[i][indexB] = temp;
+      myArray[i][indexC] = parseInt(myArray[i][indexC]);
+    }
+    }
+
+    newFunc(bikeArrayDirty, dataFiltered, 4, 0, 1, 3);
+
     console.log(dataFiltered);
+
+    //Function filtering for amount of bikes per stop
+    var filterFunc = function(myArray, indexSpot, value, spliceLength){
+    for (i = 0; i < myArray.length; i++){
+      if(myArray[i][indexSpot] <= value) {
+        myArray.splice([i], spliceLength);
+        i--;
+        }
+      }
+    }
+
+    //Logging the list final array
+    console.log(filterFunc(dataFiltered, 3, 20, 1));
+
+    //function adding markers and labeling
+    var labelFunc = function(myArray, labelSpot){
+    for (var i = 0; i < myArray.length; i++){
+        L.marker(myArray[i]).addTo(map).bindPopup(myArray[i][labelSpot]).openPopup(dataFiltered[i][labelSpot]);
+      }
+    }
+
+    labelFunc(dataFiltered, 2);
+
+
     /* =====================
 
     End code to filter data
 
     ===================== */
 
-    var map = L.map('map', {
-      center: [39.9522, -75.1639],
-      zoom: 14
-    });
-
-    var Stamen_TonerLite = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.{ext}', {
-      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      subdomains: 'abcd',
-      minZoom: 0,
-      maxZoom: 20,
-      ext: 'png'
-    }).addTo(map);
-
-  //  for (i = 0; i < dataFiltered.length; i++){
-//        L.marker(dataFiltered[i]).addTo(map).bindPopup(dataFiltered[i][2]).openPopup(dataFiltered[i][2]);
-  //  }
-
     /* =====================
 
     Start code to add markers to map
 
     ===================== */
-
-    for (var i = 0; i < dataFiltered.length; i++){
-        L.marker(dataFiltered[i]).addTo(map).bindPopup(dataFiltered[i][2]).openPopup(dataFiltered[i][2]);
-      }
 
     /* =====================
 
