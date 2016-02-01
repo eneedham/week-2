@@ -49,19 +49,76 @@
        EXTRA: Some of these locations offer dental services as well. Can you find some way to give dental locations a different icon? (Here's some relevant documentation: http://leafletjs.com/reference.html#icon)
 
        Remember: functions are meant to facilitate code comprehension and reuse.
+
+       First, we want to know where the health centers are located within the zip codes from 19140 to 19149 (inclusive).
+
+Markers should be made draggable with a custom Options object
+All and only markers found within the zip code range from 19140 to 19149 (inclusive) should appear
+Each marker should have custom content that comes up in a dialog when clicked which tells us the location name
+Second, we'd like to provide users with the ability to export our data in a simplified CSV format. We can provide this to them in console printouts.
+
+On application start, console.log EITHER:
+An array for the keys and an array for each 'row' OR
+An array of arrays in which the first sub-array contains keys and the rest of the arrays contain the 'rows' of our CSV
       ===================== */
 
 
       /* =====================
 
-      Start code
+
 
       ===================== */
 
-      var jsonToCsv = function(json) { console.log(json); };
+      var data = healthCenters
 
+      console.log(Object.keys(data[0]));
 
-      var addMarkers = function(map) {};
+      for (var i = 0;  i < data.length;  i = i + 1) {
+        var values = [];// this is empty before each new loop on an object
+        for (key in data[i]) {
+          values.push(data[i][key]);
+        }
+        console.log(values);
+        if(data[i].ZIP >= 19140 && data[i].ZIP <= 19149)
+          L.marker([data[i].LAT, data[i].LNG], {draggable:true}).addTo(map).bindPopup(data[i].NAME).openPopup(data[i].NAME);
+    }
+
+    var csvPrompt = confirm("Would you like to download a CSV of Health Centers? Press Okay to download or Press Cancel not to download");
+
+    function jsonToCsv(objArray){
+    var getKeys = function(obj){
+      var keys = [];
+      for(var key in obj){
+      keys.push(key);
+      }
+      return keys.join();
+      }, array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray
+      , str = ''
+      ;
+        for (var i = 0; i < array.length; i++) {
+          var line = '';
+          for (var index in array[i]) {
+            if(line != '') line += ','
+
+            line += array[i][index];
+          }
+
+          str += line + '\r\n';
+        }
+
+        str = getKeys(objArray[0]) + '\r\n' + str;
+
+      var a = document.createElement('a');
+        var blob = new Blob([str], {'type':'application\/octet-stream'});
+        a.href = window.URL.createObjectURL(blob);
+        a.download = 'export.csv';
+        a.click();
+        return true;
+    }
+
+   if (csvPrompt == true){
+      jsonToCsv(data);
+   }
 
       /* =====================
 
@@ -70,8 +127,8 @@
       ===================== */
 
 
-      jsonToCsv(healthCenters);
-      addMarkers(map);
+    //  jsonToCsv(healthCenters);
+    //  addMarkers(map);
     </script>
     <!--Your code ends here-->
   </body>
